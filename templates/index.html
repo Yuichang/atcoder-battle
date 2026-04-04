@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtCoder-Battle</title>
+    <link rel="stylesheet" href="https://unpkg.com/modern-css-reset/dist/reset.min.css">
+    <link rel="stylesheet" href="/static/base.css">
+</head>
+
+<body>
+    <h1>AtCoder-Battle</h1><br>
+    <h2>複数のAtCoderユーザーの名前を入力すると、共通のRatedコンテストを調べて勝敗を出します</h2><br>
+    <form action="result.html" method="get">
+        <!-- 後日複数ユーザー対応 -->
+        <!-- <button id="add-btn">ユーザーを増やす</button> -->
+
+        <p>一人目のユーザー</p>
+        <input type="text" name="user1" placeholder="tourist" required><br>
+
+        <p>二人目のユーザー</p>
+        <input type="text" name="user2" placeholder="ksun48" required><br>
+
+        <button type="submit" id="submit-btn">結果</button>
+    </form>
+
+</body>
+
+</html>
