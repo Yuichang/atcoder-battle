@@ -16,6 +16,10 @@ func main() {
 
 	r.GET("/", handlers.ShowIndex)
 
+	r.GET("/result", handlers.ShowResult)
+
+	r.GET("/sample", handlers.ShowSample)
+
 	// サーバ起動(http://localhost:8080)
 	r.Run()
 }
