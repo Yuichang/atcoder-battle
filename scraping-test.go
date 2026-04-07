@@ -36,11 +36,11 @@ func GetUserData(username string) ([]AtCHistory, error) {
 	return history, nil
 }
 
-func main() {
+/*func main() {
 	// 実行テスト
 	username := "tourist"
 	_, err := GetUserData(username)
 	if err != nil {
 		fmt.Println("err")
 	}
-}
+}*/
