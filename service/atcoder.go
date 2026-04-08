@@ -24,8 +24,8 @@ type AtCHistory struct {
 type CompareResult struct {
 	ContestShortName string
 	WinUser          int
-	user1Place       int
-	user2Place       int
+	User1Place       int
+	User2Place       int
 }
 
 // ユーザー名を取得して返す
@@ -92,8 +92,8 @@ func CompareUsers(user1 string, user2 string) ([]CompareResult, error) {
 				compareResults = append(compareResults, CompareResult{
 					ContestShortName: contestShortName,
 					WinUser:          winUser,
-					user1Place:       user1History[i].Place,
-					user2Place:       user2History[j].Place,
+					User1Place:       user1History[i].Place,
+					User2Place:       user2History[j].Place,
 				})
 			}
 		}
