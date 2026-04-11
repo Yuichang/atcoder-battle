@@ -85,36 +85,85 @@ func CompareUsers(user1 string, user2 string) (BattleResult, error) {
 	// 共通のRatedコンテストを調べて、順位比較で勝ち負けを集計
 
 	var user1Wins, user2Wins, draw int
-	var winner, matchWinner string
+	var winner string
 
 	// map使って高速化させる（後でやる）
-	for i := 0; i < len(user1History); i++ {
-		for j := 0; j < len(user2History); j++ {
-			// 共通のRatedコンテストが見つかった
-			if user1History[i].ContestScreenName == user2History[j].ContestScreenName && user1History[i].IsRated && user2History[j].IsRated {
-				matchWinner = ""
-				if user1History[i].Place < user2History[j].Place {
-					user1Wins++
-					matchWinner = user1
-				} else if user1History[i].Place > user2History[j].Place {
-					user2Wins++
-					matchWinner = user2
-				} else {
-					draw++
+	/*
+		for i := 0; i < len(user1History); i++ {
+			for j := 0; j < len(user2History); j++ {
+				// 共通のRatedコンテストが見つかった
+				if user1History[i].ContestScreenName == user2History[j].ContestScreenName && user1History[i].IsRated && user2History[j].IsRated {
 					matchWinner = ""
+					if user1History[i].Place < user2History[j].Place {
+						user1Wins++
+						matchWinner = user1
+					} else if user1History[i].Place > user2History[j].Place {
+						user2Wins++
+						matchWinner = user2
+					} else {
+						draw++
+						matchWinner = ""
+					}
+
+					// 初期の特殊なコンテスト名の時は別処理を後でする
+					contestShortName := user1History[i].ContestScreenName[:6]
+
+					compareResults = append(compareResults, CompareDetail{
+						ContestShortName: contestShortName,
+						MatchWinner:      matchWinner,
+						User1Place:       user1History[i].Place,
+						User2Place:       user2History[j].Place,
+					})
 				}
-
-				// 初期の特殊なコンテスト名の時は別処理を後でする
-				contestShortName := user1History[i].ContestScreenName[:6]
-
-				compareResults = append(compareResults, CompareDetail{
-					ContestShortName: contestShortName,
-					MatchWinner:      matchWinner,
-					User1Place:       user1History[i].Place,
-					User2Place:       user2History[j].Place,
-				})
 			}
+		}*/
+
+	// Ratedなコンテスト情報をmapに格納していく
+	user1RatedMap := make(map[string]AtCHistory)
+
+	for _, h1 := range user1History {
+		if h1.IsRated {
+			user1RatedMap[h1.ContestScreenName] = h1
 		}
+	}
+
+	for _, h2 := range user2History {
+		if !h2.IsRated {
+			continue
+		}
+
+		h1, ok := user1RatedMap[h2.ContestScreenName]
+		if !ok {
+			continue
+		}
+
+		// 共通のRatedコンテストが見つかった
+		matchWinner := ""
+		if h1.Place < h2.Place {
+			user1Wins++
+			matchWinner = user1
+		} else if h1.Place > h2.Place {
+			user2Wins++
+			matchWinner = user2
+		} else {
+			draw++
+			matchWinner = "Draw"
+		}
+
+		contestShortName := h1.ContestScreenName
+
+		// 過去の特殊なコンテスト名の処理は後で
+		if len(contestShortName) > 6 {
+			contestShortName = contestShortName[:6]
+		}
+
+		compareResults = append(compareResults, CompareDetail{
+			ContestShortName: contestShortName,
+			MatchWinner:      matchWinner,
+			User1Place:       h1.Place,
+			User2Place:       h2.Place,
+		})
+
 	}
 
 	// 勝者を決定させる
