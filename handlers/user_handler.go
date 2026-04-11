@@ -25,23 +25,8 @@ func ShowResult(c *gin.Context) {
 		})
 		return
 	}
-
-	/*c.HTML(http.StatusOK, "result.html", gin.H{
-		"contestShortName": result.ContestShortName,
-		"matchWinner":          result.matchWinner,
-		"user1Place":       result.User1Place,
-		"user2Place":       result.User2Place,
-		"results": result,
-	})
-	*/
-
 	c.HTML(http.StatusOK, "result.html", result)
 }
-
-/*func ShowResult(c *gin.Context) {
-	// 一旦ユーザーは二人だけにする
-
-}*/
 
 // サンプルページを表示するだけ
 func ShowSample(c *gin.Context) {
