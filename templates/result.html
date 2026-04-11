@@ -21,15 +21,17 @@
             <!-- {{.results}} -->
 
             {{range .results}}
-            <p>{{.ContestShortName}}</p>
-            <p>{{.WinUser}}</p>
-            <p>{{.User1Place}}</p>
-            <p>{{.User2Place}}</p>
+
+            <div>
+                <p>{{.User1Name}}</p>
+                <p>{{.User2Name}}</p>
+                <p>{{.User1Wins}}</p>
+                <p>{{.User2Wins}}</p>
+                <p>{{.Draw}}</p>
+                <p>{{.total}}</p>
+                <p>{{.Results}}</p>
+            </div>
             {{end}}
-
-
-
-        </div>
     </h2>
 
 </body>

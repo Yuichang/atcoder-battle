@@ -21,11 +21,22 @@ type AtCHistory struct {
 }
 
 // HTMLに表示させるデータの構造体
-type CompareResult struct {
+// 詳細情報表示するときだけ使う形式に変えるかも。
+type CompareDetail struct {
 	ContestShortName string
 	WinUser          int
 	User1Place       int
 	User2Place       int
+}
+
+type BattleResult struct {
+	User1Name string
+	User2Name string
+	User1Wins int
+	User2Wins int
+	Draw      int
+	total     int
+	Results   []CompareDetail
 }
 
 // ユーザー名を取得して返す
@@ -52,12 +63,16 @@ func GetUserData(username string) ([]AtCHistory, error) {
 }
 
 // 一旦二人のユーザーのデータを比較して返す
-func CompareUsers(user1 string, user2 string) ([]CompareResult, error) {
+func CompareUsers(user1 string, user2 string) ([]BattleResult, error) {
 	// 二人のユーザーデータを取得
 	var user1History, user2History []AtCHistory
 	var err error
 
-	var compareResults []CompareResult
+	// バトルの詳細結果を格納する
+	var compareResults []CompareDetail
+
+	// バトルの結果を格納する
+	var battleResults []BattleResult
 
 	user1History, err = GetUserData(user1)
 	if err != nil {
@@ -90,7 +105,8 @@ func CompareUsers(user1 string, user2 string) ([]CompareResult, error) {
 
 				// 初期の特殊なコンテスト名の時は別処理を後でする
 				contestShortName := user1History[i].ContestScreenName[:6]
-				compareResults = append(compareResults, CompareResult{
+
+				compareResults = append(compareResults, CompareDetail{
 					ContestShortName: contestShortName,
 					WinUser:          winUser,
 					User1Place:       user1History[i].Place,
@@ -99,8 +115,20 @@ func CompareUsers(user1 string, user2 string) ([]CompareResult, error) {
 			}
 		}
 	}
+	// バトルの結果をまとめる
+	battleResults = append(battleResults, BattleResult{
+		User1Name: user1,
+		User2Name: user2,
+		User1Wins: user1Wins,
+		User2Wins: user2Wins,
+		Draw:      draw,
+		total:     user1Wins + user2Wins + draw,
+		Results:   compareResults,
+	})
 
-	return compareResults, nil
+	fmt.Println(battleResults)
+
+	return battleResults, nil
 }
 
 // 取得した複数のユーザーのデータを処理
