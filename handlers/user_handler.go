@@ -17,6 +17,7 @@ func ShowResult(c *gin.Context) {
 	user1 := c.Query("user1")
 	user2 := c.Query("user2")
 
+	// ユーザーデータを取得後、比較してデータを返す
 	result, err := service.CompareUsers(user1, user2)
 	if err != nil {
 		c.HTML(http.StatusInternalServerError, "error.html", gin.H{

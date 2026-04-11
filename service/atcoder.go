@@ -88,6 +88,7 @@ func CompareUsers(user1 string, user2 string) ([]CompareResult, error) {
 					winUser = 0
 				}
 
+				// 初期の特殊なコンテスト名の時は別処理を後でする
 				contestShortName := user1History[i].ContestScreenName[:6]
 				compareResults = append(compareResults, CompareResult{
 					ContestShortName: contestShortName,
