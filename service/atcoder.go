@@ -24,18 +24,20 @@ type AtCHistory struct {
 // 詳細情報表示するときだけ使う形式に変えるかも。
 type CompareDetail struct {
 	ContestShortName string
-	WinUser          int
+	MatchWinner      int
 	User1Place       int
 	User2Place       int
 }
 
+// バトルの結果を格納する構造体
 type BattleResult struct {
 	User1Name string
 	User2Name string
 	User1Wins int
 	User2Wins int
+	Winner    string
 	Draw      int
-	total     int
+	Total     int
 	Results   []CompareDetail
 }
 
@@ -63,7 +65,7 @@ func GetUserData(username string) ([]AtCHistory, error) {
 }
 
 // 一旦二人のユーザーのデータを比較して返す
-func CompareUsers(user1 string, user2 string) ([]BattleResult, error) {
+func CompareUsers(user1 string, user2 string) (BattleResult, error) {
 	// 二人のユーザーデータを取得
 	var user1History, user2History []AtCHistory
 	var err error
@@ -71,36 +73,35 @@ func CompareUsers(user1 string, user2 string) ([]BattleResult, error) {
 	// バトルの詳細結果を格納する
 	var compareResults []CompareDetail
 
-	// バトルの結果を格納する
-	var battleResults []BattleResult
-
 	user1History, err = GetUserData(user1)
 	if err != nil {
-		return nil, err
+		return BattleResult{}, err
 	}
 	user2History, err = GetUserData(user2)
 	if err != nil {
-		return nil, err
+		return BattleResult{}, err
 	}
 
 	// 共通のRatedコンテストを調べて、順位比較で勝ち負けを集計
 
-	var user1Wins, user2Wins, draw, winUser int
+	var user1Wins, user2Wins, draw, matchWinner int
+	var winner string
 
+	// map使って高速化させる（後でやる）
 	for i := 0; i < len(user1History); i++ {
 		for j := 0; j < len(user2History); j++ {
 			// 共通のRatedコンテストが見つかった
 			if user1History[i].ContestScreenName == user2History[j].ContestScreenName && user1History[i].IsRated && user2History[j].IsRated {
-				winUser = 0
+				matchWinner = 0
 				if user1History[i].Place < user2History[j].Place {
 					user1Wins++
-					winUser = 1
+					matchWinner = 1
 				} else if user1History[i].Place > user2History[j].Place {
 					user2Wins++
-					winUser = 2
+					matchWinner = 2
 				} else {
 					draw++
-					winUser = 0
+					matchWinner = 0
 				}
 
 				// 初期の特殊なコンテスト名の時は別処理を後でする
@@ -108,27 +109,36 @@ func CompareUsers(user1 string, user2 string) ([]BattleResult, error) {
 
 				compareResults = append(compareResults, CompareDetail{
 					ContestShortName: contestShortName,
-					WinUser:          winUser,
+					MatchWinner:      matchWinner,
 					User1Place:       user1History[i].Place,
 					User2Place:       user2History[j].Place,
 				})
 			}
 		}
 	}
+
+	// 勝者を決定させる
+	if user1Wins > user2Wins {
+		winner = user1
+	} else if user1Wins < user2Wins {
+		winner = user2
+	} else {
+		winner = "Draw"
+	}
+
 	// バトルの結果をまとめる
-	battleResults = append(battleResults, BattleResult{
+	battleResult := BattleResult{
 		User1Name: user1,
 		User2Name: user2,
 		User1Wins: user1Wins,
 		User2Wins: user2Wins,
+		Winner:    winner,
 		Draw:      draw,
-		total:     user1Wins + user2Wins + draw,
+		Total:     user1Wins + user2Wins + draw,
 		Results:   compareResults,
-	})
+	}
 
-	fmt.Println(battleResults)
-
-	return battleResults, nil
+	return battleResult, nil
 }
 
 // 取得した複数のユーザーのデータを処理

@@ -16,22 +16,21 @@
     <h1>結果の表示</h1>
 
     <h2>
+
+        <!-- データの表示方法を編集-->
+        <h2>勝者は{{.Winner}}です</h2>
+
         <div>
-            <!-- データの表示方法を編集-->
-            <!-- {{.results}} -->
+            <p>{{.User1Name}}</p>
+            <p>{{.User2Name}}</p>
+            <p>{{.User1Wins}}</p>
+            <p>{{.User2Wins}}</p>
+            <p>{{.Draw}}</p>
+            <p>{{.Total}}</p>
+            <p>{{.Results}}</p>
+        </div>
 
-            {{range .results}}
 
-            <div>
-                <p>{{.User1Name}}</p>
-                <p>{{.User2Name}}</p>
-                <p>{{.User1Wins}}</p>
-                <p>{{.User2Wins}}</p>
-                <p>{{.Draw}}</p>
-                <p>{{.total}}</p>
-                <p>{{.Results}}</p>
-            </div>
-            {{end}}
     </h2>
 
 </body>

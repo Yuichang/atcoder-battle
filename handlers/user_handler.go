@@ -26,13 +26,16 @@ func ShowResult(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "result.html", gin.H{
-		/*"contestShortName": result.ContestShortName,
-		"winUser":          result.WinUser,
+	/*c.HTML(http.StatusOK, "result.html", gin.H{
+		"contestShortName": result.ContestShortName,
+		"matchWinner":          result.matchWinner,
 		"user1Place":       result.User1Place,
-		"user2Place":       result.User2Place,*/
+		"user2Place":       result.User2Place,
 		"results": result,
 	})
+	*/
+
+	c.HTML(http.StatusOK, "result.html", result)
 }
 
 /*func ShowResult(c *gin.Context) {
