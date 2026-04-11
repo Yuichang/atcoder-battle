@@ -24,7 +24,7 @@ type AtCHistory struct {
 // 詳細情報表示するときだけ使う形式に変えるかも。
 type CompareDetail struct {
 	ContestShortName string
-	MatchWinner      int
+	MatchWinner      string
 	User1Place       int
 	User2Place       int
 }
@@ -84,24 +84,24 @@ func CompareUsers(user1 string, user2 string) (BattleResult, error) {
 
 	// 共通のRatedコンテストを調べて、順位比較で勝ち負けを集計
 
-	var user1Wins, user2Wins, draw, matchWinner int
-	var winner string
+	var user1Wins, user2Wins, draw int
+	var winner, matchWinner string
 
 	// map使って高速化させる（後でやる）
 	for i := 0; i < len(user1History); i++ {
 		for j := 0; j < len(user2History); j++ {
 			// 共通のRatedコンテストが見つかった
 			if user1History[i].ContestScreenName == user2History[j].ContestScreenName && user1History[i].IsRated && user2History[j].IsRated {
-				matchWinner = 0
+				matchWinner = ""
 				if user1History[i].Place < user2History[j].Place {
 					user1Wins++
-					matchWinner = 1
+					matchWinner = user1
 				} else if user1History[i].Place > user2History[j].Place {
 					user2Wins++
-					matchWinner = 2
+					matchWinner = user2
 				} else {
 					draw++
-					matchWinner = 0
+					matchWinner = ""
 				}
 
 				// 初期の特殊なコンテスト名の時は別処理を後でする

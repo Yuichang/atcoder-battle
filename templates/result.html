@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/modern-css-reset/dist/reset.min.css">
     <link rel="stylesheet" href="/static/base.css">
     <link rel="stylesheet" href="/static/result.css">
+    <script src="/static/result.js"></script>
 </head>
 
 <!-- 一旦二人のユーザーデータを受け取ってスクレイピングする -->
@@ -26,8 +27,25 @@
         <p>総対戦数: {{.Total}}</p>
     </div>
 
+    <button id="toggleBtn">詳細情報の表示</button>
+
+    <!-- 詳細表示 -->
+    <div id="detail" style="display: none;">
+        <h3>詳細</h3>
+
+        {{range .Results}}
+        <div class="detail-card">
+            <p class="contest">コンテスト: {{.ContestShortName}}</p>
+
+            <div class="rank-row">
+                <span>{{$.User1Name}} 順位: {{.User1Place}}</span>
+                <span>勝者: {{.MatchWinner}}</span>
+                <span>{{$.User2Name}} 順位: {{.User2Place}}</span>
+            </div>
+        </div>
+        {{end}}
+    </div>
+
 </body>
-
-
 
 </html>
