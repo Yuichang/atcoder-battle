@@ -17,7 +17,18 @@
 
     <h2>
         <div>
-            {{.results}}
+            <!-- データの表示方法を編集-->
+            <!-- {{.results}} -->
+
+            {{range .results}}
+            <p>{{.ContestShortName}}</p>
+            <p>{{.WinUser}}</p>
+            <p>{{.User1Place}}</p>
+            <p>{{.User2Place}}</p>
+            {{end}}
+
+
+
         </div>
     </h2>
 
