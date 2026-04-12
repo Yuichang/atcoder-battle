@@ -19,19 +19,19 @@
     <p> {{.User1Name}} vs {{.User2Name}}</p>
     <h2>勝者は{{.Winner}}です</h2>
 
-    <div>
-        <p>
+    <div class="summary-card">
+        <p class="summary-score">
             {{.User1Name}} {{.User1Wins}}勝 vs {{.User2Wins}}勝 {{.User2Name}}
         </p>
-        <p>引き分け: {{.Draw}}</p>
-        <p>総対戦数: {{.Total}}</p>
+        <p class="summary-meta">引き分け: {{.Draw}}</p>
+        <p class="summary-meta">総対戦数: {{.Total}}</p>
     </div>
 
     <button id="toggleBtn">詳細情報の表示</button>
 
     <!-- 詳細表示 -->
     <div id="detail" style="display: none;">
-        <h3>詳細</h3>
+        <!--   <h3>詳細</h3> -->
 
         {{range .Results}}
         <div class="detail-card">
