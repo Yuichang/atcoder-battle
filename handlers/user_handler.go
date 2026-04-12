@@ -21,7 +21,7 @@ func ShowResult(c *gin.Context) {
 	result, err := service.CompareUsers(user1, user2)
 	if err != nil {
 		c.HTML(http.StatusInternalServerError, "error.html", gin.H{
-			"message": "ユーザーデータの取得に失敗しました",
+			"message": err.Error(),
 		})
 		return
 	}
@@ -31,4 +31,19 @@ func ShowResult(c *gin.Context) {
 // サンプルページを表示するだけ
 func ShowSample(c *gin.Context) {
 	c.HTML(http.StatusOK, "sample.html", nil)
+}
+
+// ユーザーが存在するか否かを確認
+func CheckUser(c *gin.Context) {
+	username := c.Query("username")
+
+	url := "https://atcoder.jp/users/" + username + "/history/json"
+
+	resp, err := http.Get(url)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		c.JSON(400, gin.H{"ok": false})
+		return
+	}
+
+	c.JSON(200, gin.H{"ok": true})
 }

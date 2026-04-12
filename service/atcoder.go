@@ -46,6 +46,11 @@ func GetUserData(username string) ([]AtCHistory, error) {
 
 	defer resp.Body.Close()
 
+	// ユーザーが存在しない場合
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("user not found: %s", username)
+	}
+
 	var history []AtCHistory
 
 	if err := json.NewDecoder(resp.Body).Decode(&history); err != nil {

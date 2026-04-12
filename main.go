@@ -20,6 +20,8 @@ func main() {
 
 	r.GET("/sample", handlers.ShowSample)
 
+	r.GET("/check_user", handlers.CheckUser)
+
 	// サーバ起動(http://localhost:8080)
 	r.Run()
 }
