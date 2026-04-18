@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
+
 	//"github.com/Yuichang/atcoder-battle/models"
 	"github.com/Yuichang/atcoder-battle/service"
 	"github.com/gin-gonic/gin"
@@ -40,7 +42,20 @@ func CheckUser(c *gin.Context) {
 	url := "https://atcoder.jp/users/" + username + "/history/json"
 
 	resp, err := http.Get(url)
-	if err != nil || resp.StatusCode != http.StatusOK {
+	if err != nil {
+		c.JSON(400, gin.H{"ok": false})
+		return
+	}
+	defer resp.Body.Close()
+
+	var history []map[string]interface{}
+
+	if err := json.NewDecoder(resp.Body).Decode(&history); err != nil {
+		c.JSON(400, gin.H{"ok": false})
+		return
+	}
+
+	if len(history) == 0 {
 		c.JSON(400, gin.H{"ok": false})
 		return
 	}
